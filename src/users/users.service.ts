@@ -16,22 +16,36 @@ import {
   paginate,
 } from 'nestjs-typeorm-paginate';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { FilesService } from 'src/files/files.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private usersRepository: Repository<User>,
+    private filesService: FilesService,
   ) {}
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(
+    createUserDto: CreateUserDto,
+    file: Express.Multer.File,
+  ): Promise<User> {
     const { email, password } = createUserDto;
     const checkIfExists = await this.findByEmail(email);
     if (checkIfExists) {
       throw new HttpException('User already exists', HttpStatus.FORBIDDEN);
     }
+    let avatarId: string | null;
+    if (file) {
+      const avatar = await this.filesService.uploadDatabaseFile(
+        file.buffer,
+        file.originalname,
+      );
+      avatarId = avatar.id;
+    }
     const hash = await bcrypt.hash(password, 10);
     const newUser = this.usersRepository.create({
       email,
       password: hash,
+      avatarId,
     });
     return this.usersRepository.save(newUser);
   }

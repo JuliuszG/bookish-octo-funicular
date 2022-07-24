@@ -3,7 +3,7 @@ import { IsEmail, IsNotEmpty, Length } from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty({
-    description: 'User email adress',
+    description: 'User email address',
     required: true,
     type: String,
   })

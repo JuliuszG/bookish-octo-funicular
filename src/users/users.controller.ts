@@ -13,6 +13,7 @@ import {
   ClassSerializerInterceptor,
   Req,
   UseGuards,
+  UploadedFile,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -30,6 +31,7 @@ import {
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { Public } from 'src/decorators/public.decorator';
 import { OwnAccountGuard } from 'src/auth/guards/own-account.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Users Module')
 @Controller('users')
@@ -39,13 +41,19 @@ export class UsersController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Post()
   @Public()
+  @UseInterceptors(FileInterceptor('file'))
   @ApiResponse({
     status: 200,
     description: 'A user has been successfully created',
     type: User,
   })
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  create(
+    @Body() createUserDto: CreateUserDto,
+    @UploadedFile() file: Express.Multer.File = null,
+  ) {
+    console.log(createUserDto);
+    console.log(file);
+    return this.usersService.create(createUserDto, file);
   }
 
   @UseInterceptors(ClassSerializerInterceptor)

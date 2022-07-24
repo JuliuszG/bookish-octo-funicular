@@ -1,7 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { UserRole } from 'src/enums/user-role.enum';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { File } from 'src/files/entities/file.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -24,4 +31,14 @@ export class User {
     default: UserRole.ADMIN,
   })
   role: UserRole;
+
+  @ApiProperty()
+  @JoinColumn({ name: 'avatarId' })
+  @OneToOne(() => File, {
+    nullable: true,
+  })
+  public avatar?: File;
+
+  @Column({ nullable: true })
+  public avatarId?: string;
 }

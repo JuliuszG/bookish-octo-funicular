@@ -23,7 +23,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "heroku-prebuild": "export NPM_CONFIG_PRODUCTION=false; export NODE_ENV=; NPM_CONFIG_PRODUCTION=false NODE_ENV=development npm install --only=dev --dev",
-  "heroku-postbuild": "export NPM_CONFIG_PRODUCTION=true; export NODE_ENV=production;"
+    "heroku-postbuild": "export NPM_CONFIG_PRODUCTION=true; export NODE_ENV=production;"
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
@@ -67,6 +67,7 @@
     "@nestjs/testing": "^8.0.0",
     "@types/express": "^4.17.13",
     "@types/jest": "27.5.0",
+    "@types/multer": "^1.4.7",
     "@types/node": "^16.0.0",
     "@types/nodemailer": "^6.4.4",
     "@types/supertest": "^2.0.11",
